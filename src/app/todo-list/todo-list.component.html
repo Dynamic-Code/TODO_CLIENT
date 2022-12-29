@@ -1,0 +1,37 @@
+<div class="container">
+  <div class="row d-flex">
+    <div class="col-12 mt-5 ">
+      <form class="form-inline justify-content-center" [formGroup]="AddTodoFG">
+          <input type="text" class="form-control mr-4" id="addTodo" placeholder="Enter Your Task Here..." formControlName="addTodoInput">
+          <button (click)="addTodo()" type="button" class="btn btn-primary" [disabled]="this.AddTodoFG.invalid">Add Todo</button>
+      </form>
+    </div>
+  </div>
+    <div class="row mt-5">
+        <div class="col-12">
+          <div id="accordion">
+            <div class="card mt-2" *ngFor="let i of getTodoFromDb,let RowIndex = index">
+              <div class="card-header" id="headingOne">
+                <div class="mb-0 d-flex" [ngClass]="i.status?'strikethrough':'null'">
+                  <span class="btn btn-link d-flex " data-toggle="collapse" [attr.data-target]="'#collapse'+RowIndex" aria-expanded="true" [attr.aria-controls]="'collapse'+RowIndex">
+                   {{RowIndex+1}}. {{i.todoHeader}}
+                  </span>
+                  <span class="btn btn-link ml-auto">
+                    <i class="text-info fa-solid fa-pen-to-square ml-3"></i>
+                    <i *ngIf="!i.status" (click)="updateStatusTodo(i.id,i.status)" class="text-primary fa-solid fa-check mx-3"></i>
+                    <i *ngIf="i.status" (click)="updateStatusTodo(i.id,i.status)" class="fa-solid fa-rotate-left mx-3"></i>
+                    <i (click)="deleteTodo(i.id)" class="text-danger fa-solid fa-trash mr-3"></i>
+                  </span>
+                </div>
+              </div>
+          
+              <div [id]="'collapse'+RowIndex" class="collapse mt-1" aria-labelledby="headingOne" data-parent="#accordion">
+                <div class="card-body">
+                  {{i.todoContent}}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
+</div>
