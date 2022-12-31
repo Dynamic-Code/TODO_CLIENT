@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { stat } from 'fs';
+import { ToastrService } from 'ngx-toastr';
 import { AddTodo } from '../models/IAddTodo';
 import { DeleteTodo, IDeleteTodo } from '../models/IDeleteTodo';
 import { IGetTodo } from '../models/IGetTodo';
@@ -17,7 +19,7 @@ export class TodoListComponent implements OnInit {
   getTodoFromDb: IGetTodo[] = [];
   deleteTodoFromDb: IDeleteTodo;
   updateStatus: IStatusTodo;
-  constructor(private todoService: TodoService) {}
+  constructor(private todoService: TodoService, private toastr:ToastrService) {}
 
   ngOnInit(): void {
     this.AddTodoFG = new FormGroup({
@@ -25,7 +27,6 @@ export class TodoListComponent implements OnInit {
     });
 
     this.getTodo();
-    this.AddTodoFG.reset();
   }
 
   addTodo() {
@@ -33,7 +34,12 @@ export class TodoListComponent implements OnInit {
 
     this.todoService.addTodo(this.addTodoToDb).subscribe((data) => {
       this.getTodo();
+      this.toastr.success("Todo Added!")
+    },error =>{
+      this.toastr.error(error.error)
     });
+    this.AddTodoFG.reset();
+
   }
 
   getTodo() {
@@ -49,6 +55,10 @@ export class TodoListComponent implements OnInit {
     this.deleteTodoFromDb = new DeleteTodo(this.getTodoFromDb[0].userId, id);
     this.todoService.deleteTodo(this.deleteTodoFromDb).subscribe((data) => {
       this.getTodo();
+      this.toastr.success("Todo Deleted!")
+
+    },error =>{
+      this.toastr.error(error.error)
     });
   }
 
@@ -60,6 +70,12 @@ export class TodoListComponent implements OnInit {
     );
     this.todoService.doneTodo(this.updateStatus).subscribe((data) => {
       this.getTodo();
+      if(status == true)
+      this.toastr.success("Todo marked Completed !")
+      this.toastr.success("Todo marked Pending !")
+    },
+    error =>{
+      this.toastr.error(error.error)
     });
   }
 }

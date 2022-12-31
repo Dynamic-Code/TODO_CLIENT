@@ -13,6 +13,7 @@
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
  */
  @import url("https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&display=swap");
+ @import '~ngx-toastr/toastr.css';
  :root {
    --blue: #b58900;
    --indigo: #6610f2;
